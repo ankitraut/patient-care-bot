@@ -1,0 +1,30 @@
+---
+description: "Rendered conversation summary"
+author: "system"
+---
+Conversation summary for {{ summary.patient.name }} (age {{ summary.patient.age }}):
+
+Confirmation:
+{% if summary.confirmation %}Spoken with patient: {{ summary.confirmation.confirmed }} (confidence={{ summary.confirmation.confidence }})
+{% else %}No confirmation data{% endif %}
+
+Condition summary:
+{% for p in summary.condition_summary %}- {{ p.problem }} (severity: {{ p.severity }})
+{% else %}- No problems reported
+{% endfor %}
+
+Medications:
+{% for m in summary.medication_summary %}- {{ m.medication.name }}: {{ m.status }}{% if m.note %} (note: {{ m.note }}){% endif %}
+{% else %}- No medication information
+{% endfor %}
+
+Queries & Help Provided:
+{% for q in summary.queries_and_help %}- {{ q.issue }}: {{ q.help }}
+{% else %}- No queries recorded
+{% endfor %}
+
+Follow ups:
+{% for f in summary.follow_up %}- {{ f }}
+{% else %}- No follow ups
+{% endfor %}
+
