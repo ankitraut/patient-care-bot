@@ -7,7 +7,9 @@ from sentence_transformers import SentenceTransformer
 class VectorStore:
     """Simple FAISS-backed vector store for semantic search."""
 
-    def __init__(self, index_path: Optional[str] = None, model_name: str = "all-MiniLM-L6-v2"):
+    def __init__(
+        self, index_path: Optional[str] = None, model_name: str = "all-MiniLM-L6-v2"
+    ):
         self.model = SentenceTransformer(model_name)
         self.index = None
         self.documents = []
@@ -36,7 +38,9 @@ class VectorStore:
         D, I = self.index.search(vec, k)
         results = []
         for dist, idx in zip(D[0], I[0]):
-            meta = self.documents[idx] if idx < len(self.documents) else {"_missing": True}
+            meta = (
+                self.documents[idx] if idx < len(self.documents) else {"_missing": True}
+            )
             results.append({"score": float(dist), "metadata": meta})
         return results
 
@@ -44,4 +48,3 @@ class VectorStore:
         if self.index is not None:
             faiss.write_index(self.index, path)
             self.index_path = path
-

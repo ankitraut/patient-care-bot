@@ -13,22 +13,24 @@ class SeverityLevel(enum.Enum):
     NO_PROBLEMS = "NO_PROBLEMS"
 
 
-class HealthStatus(enum.Enum):
+class HealthStatus(BaseModel):
     severity: SeverityLevel
     problems: str
 
 
-class MedicationStatus(enum.Enum):
+class MedicationStatus(BaseModel):
     taking_on_time: bool
     help_needed: bool
     details: str
+
 
 class AgentTasks(enum.Enum):
     identify = "identify"
     wellbeing = "wellbeing"
     medication_adherence = "medication_adherence"
 
-class AgentSummary(enum.Enum):
+
+class AgentSummary(BaseModel):
     identity_verified: bool
     wellbeing: Optional[HealthStatus]
     medication_status: Optional[MedicationStatus]
