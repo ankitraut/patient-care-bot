@@ -3,10 +3,10 @@ import logging
 import json
 
 from dotenv import load_dotenv
-from livekit.agents import Agent, JobContext, AgentSession, WorkerOptions, cli
+from livekit.agents import Agent
 from livekit.plugins import silero
 
-from src.data_classes import AgentTasks, AgentSummary, UserData
+from src.data_classes import AgentTasks
 from src.tasks.confirm_identity import IdentityConfirmationTask
 from src.tasks.med_adherence import MedicationTask
 from src.tasks.wellbeing import WellbeingTask
