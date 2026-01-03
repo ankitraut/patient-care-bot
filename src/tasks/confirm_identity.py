@@ -7,7 +7,8 @@ class IdentityConfirmationTask(AgentTask[bool]):
 
     def __init__(self, chat_ctx=None):
         super().__init__(
-            instructions=PromptManager.get_prompt("greeting_instructions"), chat_ctx=chat_ctx
+            instructions=PromptManager.get_prompt("greeting_instructions"),
+            chat_ctx=chat_ctx,
         )
 
     async def on_enter(self) -> None:

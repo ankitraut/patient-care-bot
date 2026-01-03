@@ -27,13 +27,13 @@ class WellbeingTask(AgentTask[HealthStatus]):
         )
 
     @function_tool()
-    async def patient_wellbeing_summary(self, wellbeing_summary: str) -> None | ToolError:
+    async def patient_wellbeing_summary(
+        self, wellbeing_summary: str
+    ) -> None | ToolError:
         """Use this to record the Summary of the patient's current condition/wellbeing
         wellbeing_summary: A dict representation of the HealthStatus class"""
         try:
             summary = json.loads(wellbeing_summary)
-            self.complete(HealthStatus(
-                **summary
-            ))
+            self.complete(HealthStatus(**summary))
         except:
             return ToolError(traceback.format_exc())

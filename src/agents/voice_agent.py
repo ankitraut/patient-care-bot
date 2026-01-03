@@ -1,6 +1,5 @@
-from typing import List
+from typing import List, Optional
 import logging
-import json
 
 from dotenv import load_dotenv
 from livekit.agents import Agent
@@ -10,7 +9,7 @@ from src.data_classes import AgentTasks
 from src.tasks.confirm_identity import IdentityConfirmationTask
 from src.tasks.med_adherence import MedicationTask
 from src.tasks.wellbeing import WellbeingTask
-
+from src.vector_store.index_manager import IndexManager
 
 logger = logging.getLogger("patient-care-agent")
 logger.setLevel(logging.INFO)
@@ -19,7 +18,11 @@ load_dotenv()
 
 
 class PatientCareAgent(Agent):
-    def __init__(self, selected_tasks: List[AgentTasks]):
+    def __init__(
+        self,
+        selected_tasks: List[AgentTasks],
+        index_manager: Optional[IndexManager] = None,
+    ):
         super().__init__(
             instructions="You are a medical follow-up agent. Be profession and empathetic.",
             stt="assemblyai/universal-streaming",
@@ -29,6 +32,7 @@ class PatientCareAgent(Agent):
         )
         self.selected_tasks = selected_tasks
         self.final_results = {}
+        self.index_manager = index_manager
 
     async def on_enter(self) -> None:
         # Sequence tasks based on choice.
@@ -52,7 +56,8 @@ class PatientCareAgent(Agent):
         # Medication check task
         if AgentTasks.medication_adherence in self.selected_tasks:
             self.final_results["medication"] = await MedicationTask(
-                chat_ctx=self.chat_ctx
+                chat_ctx=self.chat_ctx,
+                index_manager=self.index_manager,
             )
 
         # Final Summary and Closure

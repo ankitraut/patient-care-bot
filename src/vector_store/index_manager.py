@@ -15,20 +15,29 @@ class IndexManager:
     - list_indexes() -> list of available index names
     """
 
-    def __init__(self, storage_dir: str = "indexes", model_name: str = "all-MiniLM-L6-v2", cache_size: int = 32):
+    def __init__(
+        self,
+        storage_dir: str = "indexes",
+        model_name: str = "all-MiniLM-L6-v2",
+        cache_size: int = 32,
+    ):
         self.storage_dir = storage_dir
         self.model_name = model_name
         os.makedirs(self.storage_dir, exist_ok=True)
 
         # wrap the static loader with lru_cache so loaded VectorStore objects are reused
-        self._load_cached = functools.lru_cache(maxsize=cache_size)(IndexManager._load_from_disk)
+        self._load_cached = functools.lru_cache(maxsize=cache_size)(
+            IndexManager._load_from_disk
+        )
 
     def _paths(self, name: str):
         index_path = os.path.join(self.storage_dir, f"{name}.faiss")
         meta_path = os.path.join(self.storage_dir, f"{name}.meta.json")
         return index_path, meta_path
 
-    def create_index(self, name: str, texts: List[str], metadatas: Optional[List[dict]] = None) -> None:
+    def create_index(
+        self, name: str, texts: List[str], metadatas: Optional[List[dict]] = None
+    ) -> None:
         """
         Create a new index from texts and optional metadatas and persist it.
         Overwrites existing files with the same name.
@@ -78,7 +87,9 @@ class IndexManager:
             pass
 
     @staticmethod
-    def _load_from_disk(index_path: str, meta_path: str, model_name: str) -> VectorStore:
+    def _load_from_disk(
+        index_path: str, meta_path: str, model_name: str
+    ) -> VectorStore:
         """
         Static loader used by the cached wrapper. Keeps signature hashable for lru_cache.
         """

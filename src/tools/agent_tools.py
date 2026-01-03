@@ -41,7 +41,9 @@ class IndexQueryTool:
     def __init__(self, manager: IndexManager):
         self.manager = manager
 
-    async def run(self, index_name: str, query: str, k: int = 5) -> List[Dict[str, Any]]:
+    async def run(
+        self, index_name: str, query: str, k: int = 5
+    ) -> List[Dict[str, Any]]:
         def _q():
             store = self.manager.load_index(index_name)
             return store.search(query, k=k)
